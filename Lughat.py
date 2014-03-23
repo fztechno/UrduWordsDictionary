@@ -1,5 +1,8 @@
 import os
 import sys
+from datetime import datetime
+
+start=datetime.now()
 
 #Function to populate a set with file contents
 def list_populate(FILE_NAME):
@@ -37,7 +40,7 @@ def file_writes(basedir,dictWordsList):
 def program_stats(totWords,LUGHAT):
     print("Total words in Dictionary are {}".format(totWords))
     print("Total words in LUGHAT are {}".format(len(LUGHAT)))
-    #print(datetime.now()-start)
+    print(datetime.now()-start)
 
 urduLetters = {
 "Alif":"ا","AlifMada":"آ", "Bay":"ب", "Pay":"پ", "Tay":"ت","Ttay":"ٹ","Say":"ث","Jeem":"ج",
