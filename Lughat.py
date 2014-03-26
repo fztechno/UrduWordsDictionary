@@ -4,7 +4,7 @@ from datetime import datetime
 
 start=datetime.now()
 
-#Function to populate a set with file contents
+#Function to populate a list with file contents
 def list_populate(FILE_NAME):
     try:
         with open(FILE_NAME,'r',encoding='utf8') as set_file:
@@ -21,6 +21,17 @@ def wordList(LUGHAT,letter,key,dictAlfaaz={}):
             dictAlfaaz[key].append(word)
     return dictAlfaaz
 
+def dictWordsListfunc(totWords,LUGHAT):
+
+    #Creating Dictionary with Urdu Letters as Keys and words starting with that letter as a list
+    dictWordsList = dict((k,list()) for k in urduLetters.keys())
+
+    for key in urduLetters.keys():
+        dictWordsList = wordList(LUGHAT,urduLetters[key],key,dictWordsList)
+        #print("Words in {} are: {}".format(key, len(dictWordsList[key])))
+        totWords +=len(dictWordsList[key])
+    return dictWordsList,totWords
+
 def file_writes(basedir,dictWordsList):
     totWords = 0
     fileNames = []
@@ -34,7 +45,7 @@ def file_writes(basedir,dictWordsList):
                  #print("{} words are : ".format(y))
                 fWrite.write("{}\n".format(y))
                 fileln += 1
-        print("Words in {} are : {}".format(wordfile,fileln))
+        #print("Words in {} are : {}".format(wordfile,fileln))
         fileNames.append(wordfile)
 
 def program_stats(totWords,LUGHAT):
@@ -49,23 +60,18 @@ urduLetters = {
 "Kaaf":"ک","Qaaf":"ق","Gaaf":"گ","Laam":"ل","Meem":"م","Noon":"ن","Wow":"و","Hai":"ہ","Hamza":"ء","ChotiYay":"ی","BariYay":"ے"
 }
 
-
+totWords = 0
 basedir = r'C:\Test\Data'
 FILE_NAME = os.path.join(basedir,"FullWords.txt")
 
+#Populating list with all words in file
 LUGHAT = list_populate(FILE_NAME)
 
-#Creating Dictionary with Urdu Letters as Keys and words starting with that letter as a list
-dictWordsList = dict((k,list()) for k in urduLetters.keys())
-
-totWords = 0
-for key in urduLetters.keys():
-    dictWordsList = wordList(LUGHAT,urduLetters[key],key,dictWordsList)
-    #print("Words in {} are: {}".format(key, len(dictWordsList[key])))
-    totWords +=len(dictWordsList[key])
+#Creating dictionary of word lists
+dictWords,totWords = dictWordsListfunc(totWords,LUGHAT)
 
 #Printing statistics about program
 program_stats(totWords,LUGHAT)
 
-
-file_writes(basedir,dictWordsList)
+#Writing one file for all words starting, with a specific letter
+file_writes(basedir,dictWords)
